@@ -1,0 +1,50 @@
+body,
+html,
+p {
+  font-weight: 300;
+  line-height: 1.5rem;
+}
+
+h1 {
+  color: var(--color-secondary);
+  line-height: 50px !important;
+  @media all and (min-width: $medium) {
+    line-height: 70px !important;
+  }
+}
+
+// header
+
+.header .secondary-navigation-item {
+  text-transform: uppercase;
+  font-size: var(--font-size-5);
+  font-weight: 600;
+
+  a,
+  a:visited,
+  a:active {
+    color: var(--color-dark-gray);
+
+    &:hover {
+      color: var(--color-tertiary);
+    }
+  }
+}
+
+// footer
+
+.footer {
+  font-size: var(--font-size-4);
+}
+
+.footer .secondary-navigation-item {
+  text-transform: uppercase;
+  margin: var(--space-2);
+}
+
+.footer a,
+.footer a:visited,
+.footer a:active {
+  padding-bottom: var(--space-2);
+  border-bottom: solid 1px var(--color-white);
+}

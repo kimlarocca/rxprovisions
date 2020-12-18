@@ -23,7 +23,8 @@
     "eslint-plugin-vue": "^7.0.0-0",
     "lint-staged": "^9.5.0",
     "node-sass": "^4.12.0",
-    "sass-loader": "^8.0.2"
+    "sass-loader": "^8.0.2",
+    "vue-evolve": "0.0.10"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
