@@ -1,4 +1,4 @@
-# gene-leap
+# rx provisions
 
 ## Project setup
 ```

@@ -1,3 +1,68 @@
 @import "~vue-evolve/src/assets/scss/main";
 @import "settings";
-@import "overrides";
+
+// global styles
+
+body,
+html,
+p {
+  font-weight: 300;
+  line-height: 1.5rem;
+}
+
+table {
+  td {
+    margin: 0;
+    padding: .5rem;
+    background-color: var(--color-white);
+  }
+}
+
+// buttons
+.button {
+  border-radius: 20px;
+}
+
+// order form
+.order-form {
+  .input-group {
+    .input-group-field {
+      border-top-left-radius: 20px;
+      border-bottom-left-radius: 20px;
+      padding-left: 20px;
+    }
+  }
+
+  .button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+// npi form
+.npi-form {
+  background: url("/images/home-hero2.jpg") no-repeat;
+  background-size: cover;
+  padding: 140px 0;
+  text-align: center;
+  color: var(--color-white);
+
+  h2 {
+    text-shadow: 0 0 20px var(--color-black);
+    margin-bottom: var(--space-4);
+  }
+
+  .input-group {
+    max-width: 650px;
+    margin: auto;
+  }
+}
+
+// transitions
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0
+}

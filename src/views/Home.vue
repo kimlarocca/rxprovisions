@@ -1,72 +1,145 @@
 <template>
-  <div class="home l-container">
-    <div class="l-grid l-grid--2up l-grid--middle">
-      <h1>Completely Novel Gene Therapies</h1>
-      <p>GeneLeap Bioteach is a global gene therapy company in the Luye Lifesciences portfolio of companies, a leader in China and a new entrant in the US. Our goal is to deliver a best-in-class portfolio of completely novel gene therapies.</p>
+  <div class="home">
+    <div class="home-hero">
+      <div class="l-container l-grid l-grid--3x2 l-grid--1up--small l-grid--large-gutters">
+        <div class="home-hero-left">
+          <h1>Providing secure prescription solutions to the healthcare industry since 1997</h1>
+          <p>New Jersey’s first approved vendor for Security Rx forms, RX PROvisions provides safe and secure healthcare forms to doctors for use and distribution to their patients, and offer significant discounts to our re-sellers.</p>
+          <v-button href="/order">Get Started</v-button>
+        </div>
+        <div class="home-hero-right">
+          <picture>
+            <source
+                srcset="/images/home-hero.webp"
+                type="image/webp"
+            >
+            <source
+                srcset="/images/home-hero.jpg"
+                type="image/jpeg"
+            >
+            <img
+                src="/images/home-hero.jpg"
+                alt="RX PROvisions"
+            >
+          </picture>
+        </div>
+      </div>
+    </div>
+    <div class="home-hero-mobile">
+      <picture>
+        <source
+            srcset="/images/home-hero-mobile.webp"
+            type="image/webp"
+        >
+        <source
+            srcset="/images/home-hero-mobile.jpg"
+            type="image/jpeg"
+        >
+        <img
+            src="/images/home-hero-mobile.jpg"
+            alt="RX PROvisions"
+        >
+      </picture>
+    </div>
+    <v-spacer size="quad" />
+    <div class="home-cards l-container l-grid l-grid--3up l-grid--large-gutters">
+      <div>
+        <card
+            icon="fas fa-edit"
+            subtitle="customizable"
+            description="We allow our customers to customize their practice information on portrait or landscape Rx Forms"
+        />
+      </div>
+      <div>
+        <card
+            icon="fas fa-user-tie"
+            subtitle="professional"
+            description="Our number one goal is to provide professional and personalized service at the national, state, and local levels."
+        />
+      </div>
+      <div>
+        <card
+            icon="fas fa-lock"
+            subtitle="secure"
+            description="We offer innovative, trustworthy products that comply with State and DOJ guidelines and are completely secure."
+        />
+      </div>
     </div>
     <v-spacer size="quin" />
-    <div class="home-hero">
-      <div class="home-hero-circle" />
-      <img
-          src="/images/home-hero.jpg"
-          alt="GeneLeap Bioteach, a global gene therapy company"
-      />
-    </div>
+    <npi-form />
   </div>
 </template>
 
 <script>
+import NpiForm from '../components/NpiForm'
+import VButton from 'vue-evolve/src/components/VButton'
 import VSpacer from 'vue-evolve/src/components/VSpacer'
+import Card from 'vue-evolve/src/components/Card'
 
 export default {
   name: 'Home',
   components: {
-    VSpacer
+    NpiForm,
+    VButton,
+    VSpacer,
+    Card
   }
 }
 </script>
 
 <style lang="scss">
 @import "src/assets/settings";
-.home {
-  position: relative;
-  &::after {
-    position: absolute;
-    top: 0;
-    right: -320px;
-    content: '';
-    height: 300px;
-    width: 300px;
-    border-radius: 50%;
-    background: var(--color-quaternary);
-    background: linear-gradient(180deg, var(--color-white) 0%, var(--color-tertiary) 50%, var(--color-tertiary) 100%);
 
+.home-hero {
+  background: var(--color-primary);
+  padding: var(--space-4) 0;
+  color: var(--color-white);
+
+  @media all and (min-width: $large) {
+    background: linear-gradient(var(--color-primary) 80%, var(--color-white) 20%);
+  }
+
+  h1 {
+    margin-bottom: var(--space-4);
+    max-width: 600px;
+  }
+
+  p {
+    margin-bottom: var(--space-4);
+  }
+
+  .home-hero-left {
+    padding-bottom: var(--space-6);
+  }
+
+  .home-hero-right {
+    display: none;
+    @media all and (min-width: $medium) {
+      display: block;
+    }
   }
 }
-.home .home-hero {
-  width: 100%;
+
+.home-hero-mobile {
+  @media all and (min-width: $medium) {
+    display: none;
+  }
 }
 
-.home .home-hero-circle {
-  position: relative;
-  height: 100px;
-  overflow: hidden;
+.home-cards {
+  text-align: center;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 32px;
-    height: 300px;
-    width: 300px;
-    border-radius: 50%;
-    background: var(--color-primary);
-    background: linear-gradient(90deg, var(--color-quinary) 0%, var(--color-primary) 100%);
-    @media all and (min-width: $medium) {
-      left: 100px;
-      height: 400px;
-      width: 400px;
+  .card {
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.15);
+
+    .subtitle {
+      text-transform: uppercase;
     }
+  }
+
+  i {
+    font-size: 2rem;
+    color: var(--color-secondary);
   }
 }
 </style>

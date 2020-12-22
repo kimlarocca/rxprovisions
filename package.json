@@ -1,5 +1,5 @@
 {
-  "name": "gene-leap",
+  "name": "RxProvisions",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.21.0",
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0"
@@ -24,7 +25,7 @@
     "lint-staged": "^9.5.0",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
-    "vue-evolve": "0.0.10"
+    "vue-evolve": "kimlarocca/vue-evolve#master"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
