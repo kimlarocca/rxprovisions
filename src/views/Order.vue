@@ -465,9 +465,11 @@ export default {
     //     .get('https://api.betterdoctor.com/2016-03-01/doctors/npi/' + this.ID + '?user_key=7437f9019f5910f477a58ca19aa2169c')
     //     .then(response => (this.info = response))
   },
-  updated () {
-    if (this.$route.query.ID) this.id = this.$route.query.ID
-    if (this.id > 0) this.currentStep = 1
+  watch: {
+    '$route.query.ID' () {
+      if (this.$route.query.ID) this.id = this.$route.query.ID
+      if (this.id > 0) this.currentStep = 1
+    }
   },
   methods: {
     validateStep1 () {
@@ -477,6 +479,7 @@ export default {
           this.phone !== '' &&
           this.validEmail(this.email)
       ) {
+        console.log('step1 if')
         this.displayErrorMessage = false
         this.currentStep = 2
       } else {
