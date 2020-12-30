@@ -8,9 +8,11 @@
         <v-logo />
       </template>
       <template v-slot:button>
-        <v-button href="/order">
-          Order Online
-        </v-button>
+        <router-link to="order">
+          <v-button>
+            Order Online
+          </v-button>
+        </router-link>
       </template>
     </v-header>
   </div>

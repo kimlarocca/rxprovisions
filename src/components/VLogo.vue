@@ -1,6 +1,6 @@
 <template>
   <div class="logo">
-    <router-link to="/"><i class="fas fa-prescription"></i>PROvisions, Inc. </router-link>
+    <router-link to="/"><i class="fas fa-prescription"></i>PROvisions, Inc.</router-link>
   </div>
 </template>
 

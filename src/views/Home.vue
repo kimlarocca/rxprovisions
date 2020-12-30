@@ -5,7 +5,9 @@
         <div class="home-hero-left">
           <h1>Providing secure prescription solutions to the healthcare industry since 1997</h1>
           <p>New Jersey’s first approved vendor for Security Rx forms, RX PROvisions provides safe and secure healthcare forms to doctors for use and distribution to their patients, and offer significant discounts to our re-sellers.</p>
-          <v-button href="/order">Get Started</v-button>
+          <router-link to="order">
+            <v-button>Get Started</v-button>
+          </router-link>
         </div>
         <div class="home-hero-right">
           <picture>
