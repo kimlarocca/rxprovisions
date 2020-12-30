@@ -301,6 +301,7 @@
           </div>
           <div
               v-if="currentStep===4"
+              ref="step4"
               class="order-form-step4"
           >
             <h4 class="u-space--bottom">Confirm Your Submission</h4>
@@ -408,6 +409,7 @@
         </form>
         <div
             v-if="currentStep===5"
+            ref="step5"
             class="order-form-step5"
         >
           <h4 class="u-space--bottom">Your Order Has Been Submitted!</h4>
@@ -502,12 +504,18 @@ export default {
       ) {
         this.displayErrorMessage = false
         this.currentStep = 4
+        this.$nextTick(() => {
+          this.$refs.step4.scrollIntoView();
+        })
       } else {
         this.displayErrorMessage = true
       }
     },
     submitOrder () {
       this.currentStep = 5
+      this.$nextTick(() => {
+        this.$refs.step5.scrollIntoView();
+      })
       console.log('order submitted')
     },
     validEmail: function (email) {
