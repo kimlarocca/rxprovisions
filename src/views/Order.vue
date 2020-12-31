@@ -103,7 +103,7 @@
                 @click="currentStep=1"
                 @keypress.space.enter="currentStep=1"
                 class="secondary u-space--right"
-            >Back To Step 1
+            >Go Back
             </v-button>
             <v-button
                 @click="currentStep=3"
@@ -284,7 +284,7 @@
                 @keypress.space.enter="currentStep=2"
                 class="secondary u-space--right"
             >
-              Back To Step 2
+              Go Back
             </v-button>
             <v-button
                 @click="validateStep3"
