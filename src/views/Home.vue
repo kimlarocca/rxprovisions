@@ -1,6 +1,23 @@
 <template>
   <div class="home">
     <div class="home-hero">
+      <div class="home-hero-mobile">
+        <picture>
+          <source
+              srcset="/images/home-hero-mobile.webp"
+              type="image/webp"
+          >
+          <source
+              srcset="/images/home-hero-mobile.jpg"
+              type="image/jpeg"
+          >
+          <img
+              src="/images/home-hero-mobile.jpg"
+              alt="RX PROvisions"
+          >
+        </picture>
+        <v-spacer size="double" />
+      </div>
       <div class="l-container l-grid l-grid--3x2 l-grid--1up--small l-grid--large-gutters">
         <div class="home-hero-left">
           <h1>Providing secure prescription solutions to the healthcare industry since 1997</h1>
@@ -26,22 +43,6 @@
           </picture>
         </div>
       </div>
-    </div>
-    <div class="home-hero-mobile">
-      <picture>
-        <source
-            srcset="/images/home-hero-mobile.webp"
-            type="image/webp"
-        >
-        <source
-            srcset="/images/home-hero-mobile.jpg"
-            type="image/jpeg"
-        >
-        <img
-            src="/images/home-hero-mobile.jpg"
-            alt="RX PROvisions"
-        >
-      </picture>
     </div>
     <v-spacer size="quad" />
     <div class="home-cards l-container l-grid l-grid--3up l-grid--large-gutters">
@@ -94,11 +95,12 @@ export default {
 
 .home-hero {
   background: var(--color-primary);
-  padding: var(--space-4) 0;
+  padding: 0 0 var(--space-4) 0;
   color: var(--color-white);
 
   @media all and (min-width: $large) {
     background: linear-gradient(var(--color-primary) 80%, var(--color-white) 20%);
+    padding: var(--space-4) 0;
   }
 
   h1 {

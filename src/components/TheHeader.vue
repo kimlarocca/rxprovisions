@@ -10,7 +10,7 @@
       <template v-slot:button>
         <router-link to="order">
           <v-button>
-            Order Online
+            Order
           </v-button>
         </router-link>
       </template>

@@ -11,9 +11,19 @@ export default {
 </script>
 
 <style lang="scss">
+@import "src/assets/settings";
+
 .logo {
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: bold;
+
+  @media all and (min-width: $small) {
+    font-size: 1.4rem;
+  }
+
+  @media all and (min-width: $medium) {
+    font-size: 1.5rem;
+  }
 
   a,
   a:visited,
