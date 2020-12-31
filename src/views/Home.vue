@@ -97,8 +97,10 @@ export default {
   background: var(--color-primary);
   padding: 0 0 var(--space-4) 0;
   color: var(--color-white);
+  text-align: center;
 
   @media all and (min-width: $large) {
+    text-align: left;
     background: linear-gradient(var(--color-primary) 80%, var(--color-white) 20%);
     padding: var(--space-4) 0;
   }

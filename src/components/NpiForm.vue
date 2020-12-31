@@ -47,3 +47,23 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.npi-form {
+  background: url("/images/home-hero2.jpg") no-repeat;
+  background-size: cover;
+  padding: 140px 0;
+  text-align: center;
+  color: var(--color-white);
+
+  h2 {
+    text-shadow: 0 0 20px var(--color-black);
+    margin-bottom: var(--space-4);
+  }
+
+  .input-group {
+    max-width: 650px;
+    margin: auto;
+  }
+}
+</style>

@@ -82,7 +82,7 @@ $xlarge: 1440px;
   }
 
   h2 {
-    @include typeface(secondary, 8);
+    @include typeface(secondary, 10);
     @media all and (min-width: $medium) {
       @include typeface(secondary, 11);
     }
