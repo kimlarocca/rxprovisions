@@ -44,7 +44,7 @@
                 <label class="u-space--bottom">Phone *
                   <input
                       v-model="phone"
-                      type="number"
+                      type="text"
                       :class="phone==='' ? 'error' : ''"
                   >
                 </label>
@@ -122,6 +122,7 @@
               class="order-form-step3"
           >
             <h4 class="u-space--bottom">Step 3: Prescriber Details</h4>
+            <p class="u-space--bottom">NPI Number: {{ id }}</p>
             <label class="u-space--bottom">Group Name (if applicable) or Facility Name *
               <input
                   type="text"
@@ -247,16 +248,9 @@
                   :class="licenseNumber==='' ? 'error' : ''"
               >
             </label>
-            <label class="u-space--bottom">NPI Number *
-              <input
-                  type="number"
-                  v-model="id"
-                  :class="id===null ? 'error' : ''"
-              >
-            </label>
             <label class="u-space--bottom">DEA Registration Number *
               <input
-                  type="number"
+                  type="text"
                   v-model="deaNumber"
                   :class="deaNumber==='' ? 'error' : ''"
               >
@@ -422,7 +416,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 import NpiForm from '../components/NpiForm'
 import VButton from 'vue-evolve/src/components/VButton'
 import VSpacer from 'vue-evolve/src/components/VSpacer'
@@ -436,14 +430,14 @@ export default {
   },
   data () {
     return {
-      currentStep: 0,
+      currentStep: 5,
       displayErrorMessage: false,
-      info: [],
-      id: null,
-      email: '',
-      lastName: '',
+      email: 'k@k.com',
       firstName: '',
+      lastName: '',
       phone: '',
+      info: null,
+      id: null,
       padType: 'One-Part',
       quantity: 1,
       groupName: '',
@@ -457,23 +451,50 @@ export default {
       country: 'United States',
       licenseNumber: '',
       deaNumber: '',
-      includeDea: 'no'
+      includeDea: 'yes'
     }
   },
   mounted () {
     if (this.$route.query.ID) this.id = this.$route.query.ID
     if (this.id > 0) this.currentStep = 1
-    // axios
-    //     .get('https://api.betterdoctor.com/2016-03-01/doctors/npi/' + this.ID + '?user_key=7437f9019f5910f477a58ca19aa2169c')
-    //     .then(response => (this.info = response))
   },
   watch: {
     '$route.query.ID' () {
       if (this.$route.query.ID) this.id = this.$route.query.ID
       if (this.id > 0) this.currentStep = 1
+    },
+    id () {
+      axios
+          .get('http://165.227.100.233/npi/' + this.id || this.$route.query.ID)
+          .then(response => (this.setData(response.data.results[0])))
+          .catch(function (error) {
+            console.log(error)
+          })
     }
   },
   methods: {
+    setData (data) {
+      this.info = data
+      this.firstName = data.basic.first_name
+      this.lastName = data.basic.last_name
+      this.phone = data.practiceLocations[0].telephone_number
+      this.address1 = data.practiceLocations[0].address_1
+      this.address2 = data.practiceLocations[0].address_2
+      this.city = data.practiceLocations[0].city
+      this.zip = data.practiceLocations[0].postal_code
+      this.state = data.practiceLocations[0].state
+      this.country = data.practiceLocations[0].country_name
+      if (data.identifiers) {
+        if(data.identifiers.length > 0) {
+          const deaInfo = data.identifiers.filter(item => item.issuer === 'DEA')
+          const licenseInfo = data.identifiers.filter(item => item.issuer === 'CDS')
+          this.deaNumber = deaInfo[0].identifier
+          this.licenseNumber = licenseInfo[0].identifier
+        }
+      }
+      this.prescriberName = data.basic.name_prefix + ' ' + data.basic.first_name + ' ' + data.basic.last_name + ' ' + data.basic.credential
+      this.specialty = data.taxonomies[0].desc
+    },
     validateStep1 () {
       if (
           this.firstName !== '' &&

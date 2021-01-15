@@ -3,7 +3,6 @@
     <input v-model="code">
     <svg
         class="barcode"
-        jsbarcode-format="CODE39"
         :jsbarcode-value="code"
         jsbarcode-textmargin="0"
         jsbarcode-fontoptions="bold"
