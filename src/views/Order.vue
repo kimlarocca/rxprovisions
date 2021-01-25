@@ -1,10 +1,19 @@
 <template>
   <div class="order">
-    <template v-if="currentStep===0">
+    <template v-if="currentStep === 0">
       <npi-form />
     </template>
     <div
-        v-if="currentStep>0"
+        v-if="!npiFound"
+        class="l-container u-align--center"
+    >
+      <v-spacer size="quad" />
+      <h1>NPI Not Found</h1>
+      <p>Please use the form above to try again.</p>
+      <v-spacer size="quad" />
+    </div>
+    <div
+        v-if="currentStep > 0"
         class="l-container"
     >
       <div>
@@ -176,7 +185,7 @@
               </div>
               <div>
                 <label class="u-space--bottom">State *
-                  <select v-model="state">
+                  <select v-model="state" :class="state==='' ? 'error' : ''">
                     <option value="AL">Alabama</option>
                     <option value="AK">Alaska</option>
                     <option value="AZ">Arizona</option>
@@ -231,7 +240,7 @@
                   </select>
                 </label>
                 <label class="u-space--bottom">Country *
-                  <select v-model="country">
+                  <select v-model="country" :class="country==='' ? 'error' : ''">
                     <option
                         value="United States"
                         selected
@@ -430,9 +439,10 @@ export default {
   },
   data () {
     return {
-      currentStep: 5,
+      npiFound: true,
+      currentStep: 0,
       displayErrorMessage: false,
-      email: 'k@k.com',
+      email: '',
       firstName: '',
       lastName: '',
       phone: '',
@@ -455,8 +465,15 @@ export default {
     }
   },
   mounted () {
-    if (this.$route.query.ID) this.id = this.$route.query.ID
-    if (this.id > 0) this.currentStep = 1
+    if (this.$route.query.ID) {
+      this.id = this.$route.query.ID
+      axios
+          .get('http://165.227.100.233/npi/' + this.id || this.$route.query.ID)
+          .then(response => (this.setData(response.data)))
+          .catch(function (error) {
+            console.log(error)
+          })
+    }
   },
   watch: {
     '$route.query.ID' () {
@@ -466,7 +483,7 @@ export default {
     id () {
       axios
           .get('http://165.227.100.233/npi/' + this.id || this.$route.query.ID)
-          .then(response => (this.setData(response.data.results[0])))
+          .then(response => (this.setData(response.data)))
           .catch(function (error) {
             console.log(error)
           })
@@ -474,26 +491,36 @@ export default {
   },
   methods: {
     setData (data) {
-      this.info = data
-      this.firstName = data.basic.first_name
-      this.lastName = data.basic.last_name
-      this.phone = data.practiceLocations[0].telephone_number
-      this.address1 = data.practiceLocations[0].address_1
-      this.address2 = data.practiceLocations[0].address_2
-      this.city = data.practiceLocations[0].city
-      this.zip = data.practiceLocations[0].postal_code
-      this.state = data.practiceLocations[0].state
-      this.country = data.practiceLocations[0].country_name
-      if (data.identifiers) {
-        if(data.identifiers.length > 0) {
-          const deaInfo = data.identifiers.filter(item => item.issuer === 'DEA')
-          const licenseInfo = data.identifiers.filter(item => item.issuer === 'CDS')
-          this.deaNumber = deaInfo[0].identifier
-          this.licenseNumber = licenseInfo[0].identifier
+      if (data.results && data.results.length > 0) {
+        this.info = data.results[0]
+        this.firstName = data.results[0].basic.first_name
+        this.lastName = data.results[0].basic.last_name
+        this.phone = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].telephone_number : ''
+        this.address1 = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].address_1 : ''
+        this.address2 = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].address_2 : ''
+        this.city = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].city : ''
+        this.zip = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].postal_code : ''
+        this.state = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].state : ''
+        this.country = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].country_name : 'United States'
+        if (data.results[0].identifiers) {
+          if (data.results[0].identifiers.length > 0) {
+            const deaInfo = data.results[0].identifiers.filter(item => item.issuer === 'DEA')
+            const licenseInfo = data.results[0].identifiers.filter(item => item.issuer === 'CDS')
+            this.deaNumber = deaInfo.length > 0 ? deaInfo[0].identifier : ''
+            this.licenseNumber = licenseInfo.length > 0 ? licenseInfo[0].identifier : ''
+          }
         }
+        let prescriberNameString = ''
+        if(data.results[0].basic.name_prefix) prescriberNameString += data.results[0].basic.name_prefix + ' '
+        if(data.results[0].basic.first_name) prescriberNameString += data.results[0].basic.first_name + ' '
+        if(data.results[0].basic.last_name) prescriberNameString += data.results[0].basic.last_name + ' '
+        if(data.results[0].basic.credential) prescriberNameString += data.results[0].basic.credential
+        this.prescriberName = prescriberNameString
+        this.specialty = data.results[0].taxonomies[0].desc
+        this.currentStep = 1
+      } else {
+        this.npiFound = false
       }
-      this.prescriberName = data.basic.name_prefix + ' ' + data.basic.first_name + ' ' + data.basic.last_name + ' ' + data.basic.credential
-      this.specialty = data.taxonomies[0].desc
     },
     validateStep1 () {
       if (
@@ -502,7 +529,6 @@ export default {
           this.phone !== '' &&
           this.validEmail(this.email)
       ) {
-        console.log('step1 if')
         this.displayErrorMessage = false
         this.currentStep = 2
       } else {
@@ -538,6 +564,21 @@ export default {
         this.$refs.step5.scrollIntoView();
       })
       console.log('order submitted')
+      axios({
+        method: 'post',
+        url: 'https://api.emailjs.com/api/v1.0/email/send/',
+        data: {
+          service_id: 'service_n1nlx9r',
+          template_id: 'template_e5mh7zg',
+          user_id: 'user_s0M53u6qxQpT90KoWRp78',
+          template_params: {
+            'subject': 'new order from rxprovisions.com',
+            'message': '<p>test message</p>',
+            'to': 'kim@4siteusa.com',
+            'from_name': 'rxprovisions.com',
+          }
+        }
+      })
     },
     validEmail: function (email) {
       let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
