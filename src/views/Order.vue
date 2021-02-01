@@ -1,5 +1,8 @@
 <template>
   <div class="order">
+    <!--    <p>ID {{ id }}</p>-->
+    <!--    <p>npi not found {{ npiFound }}</p>-->
+    <!--    <p>current step {{ currentStep }}</p>-->
     <template v-if="currentStep === 0">
       <npi-form />
     </template>
@@ -12,13 +15,12 @@
       <p>Please use the form above to try again.</p>
       <v-spacer size="quad" />
     </div>
-    <div
-        v-if="currentStep > 0"
-        class="l-container"
-    >
-      <div>
-        <v-spacer size="quad" />
+    <div v-if="currentStep > 0">
+      <div class="order-hero">
         <h1>Prescription Pad Online Order Form</h1>
+      </div>
+      <div class="l-container">
+        <v-spacer size="quad" />
         <form>
           <div
               v-if="currentStep===1"
@@ -59,6 +61,12 @@
                 </label>
               </div>
             </div>
+            <v-button
+                @click="startOver"
+                class="u-space--right"
+            >
+              Start Over
+            </v-button>
             <v-button
                 @click="validateStep1"
                 @keypress.space.enter="validateStep1"
@@ -185,7 +193,10 @@
               </div>
               <div>
                 <label class="u-space--bottom">State *
-                  <select v-model="state" :class="state==='' ? 'error' : ''">
+                  <select
+                      v-model="state"
+                      :class="state==='' ? 'error' : ''"
+                  >
                     <option value="AL">Alabama</option>
                     <option value="AK">Alaska</option>
                     <option value="AZ">Arizona</option>
@@ -240,7 +251,10 @@
                   </select>
                 </label>
                 <label class="u-space--bottom">Country *
-                  <select v-model="country" :class="country==='' ? 'error' : ''">
+                  <select
+                      v-model="country"
+                      :class="country==='' ? 'error' : ''"
+                  >
                     <option
                         value="United States"
                         selected
@@ -311,88 +325,13 @@
             <div class="l-grid l-grid--2up">
               <div>
                 <p class="u-space--bottom"><strong>Contact Information</strong></p>
-                <table class="u-space--bottom">
-                  <tr>
-                    <td>First Name:</td>
-                    <td>{{ firstName }}</td>
-                  </tr>
-                  <tr>
-                    <td>Last Name:</td>
-                    <td>{{ lastName }}</td>
-                  </tr>
-                  <tr>
-                    <td>Phone:</td>
-                    <td>{{ phone }}</td>
-                  </tr>
-                  <tr>
-                    <td>Email</td>
-                    <td>{{ email }}</td>
-                  </tr>
-                </table>
-                <p class="u-space--bottom"><strong>Order Details</strong></p>
-                <table class="u-space--bottom">
-                  <tr>
-                    <td>Pad/Prescription Type:</td>
-                    <td>{{ padType }}</td>
-                  </tr>
-                  <tr>
-                    <td>Quantity:</td>
-                    <td>{{ quantity }}</td>
-                  </tr>
-                </table>
+                <span v-html="contactInformation" />
+                <p class="u-space--bottom u-space--top"><strong>Order Details</strong></p>
+                <span v-html="orderDetails" />
               </div>
               <div>
                 <p class="u-space--bottom"><strong>Prescriber Details</strong></p>
-                <table class="u-space--bottom">
-                  <tr>
-                    <td>Group Name / Facility Name:</td>
-                    <td>{{ groupName }}</td>
-                  </tr>
-                  <tr>
-                    <td>Prescriber's Name and Degree:</td>
-                    <td>{{ prescriberName }}</td>
-                  </tr>
-                  <tr>
-                    <td>Practice or Specialty:</td>
-                    <td>{{ specialty }}</td>
-                  </tr>
-                  <tr>
-                    <td>Address 1:</td>
-                    <td>{{ address1 }}</td>
-                  </tr>
-                  <tr>
-                    <td>Address 2:</td>
-                    <td>{{ address2 }}</td>
-                  </tr>
-                  <tr>
-                    <td>City:</td>
-                    <td>{{ city }}</td>
-                  </tr>
-                  <tr>
-                    <td>State:</td>
-                    <td>{{ state }}</td>
-                  </tr>
-                  <tr>
-                    <td>Country</td>
-                    <td>{{ country }}</td>
-                  </tr>
-                  <tr>
-                    <td>License Number</td>
-                    <td>{{ licenseNumber }}</td>
-                  </tr>
-                  <tr>
-                    <td>NPI Number</td>
-                    <td>{{ id }}</td>
-                  </tr>
-                  <tr>
-                    <td>DEA Registration Number</td>
-                    <td>{{ deaNumber }}</td>
-                  </tr>
-                  <tr>
-                    <td>Include DEA Number on the prescription?</td>
-                    <td>{{ includeDea }}</td>
-                  </tr>
-                </table>
+                <span v-html="prescriberDetails" />
               </div>
             </div>
             <v-button
@@ -489,6 +428,98 @@ export default {
           })
     }
   },
+  computed: {
+    contactInformation () {
+      return `
+      <table>
+        <tr>
+          <td>First Name:</td>
+          <td>` + this.firstName + `</td>
+        </tr>
+        <tr>
+          <td>Last Name:</td>
+          <td>` + this.lastName + `</td>
+        </tr>
+        <tr>
+          <td>Phone:</td>
+          <td>` + this.phone + `</td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td>` + this.email + `</td>
+        </tr>
+      </table>
+      `
+    },
+    orderDetails () {
+      return `
+      <table class="u-space--bottom">
+        <tr>
+          <td>Pad/Prescription Type:</td>
+          <td>` + this.padType + `</td>
+        </tr>
+        <tr>
+          <td>Quantity:</td>
+          <td>` + this.quantity + `</td>
+        </tr>
+      </table>
+      `
+    },
+    prescriberDetails () {
+      return `
+      <table>
+        <tr>
+          <td>Group Name / Facility Name:</td>
+          <td>` + this.groupName + `</td>
+        </tr>
+        <tr>
+          <td>Prescriber's Name and Degree:</td>
+          <td>` + this.prescriberName + `</td>
+        </tr>
+        <tr>
+          <td>Practice or Specialty:</td>
+          <td>` + this.specialty + `</td>
+        </tr>
+        <tr>
+          <td>Address 1:</td>
+          <td>` + this.address1 + `</td>
+        </tr>
+        <tr>
+          <td>Address 2:</td>
+          <td>` + this.address2 + `</td>
+        </tr>
+        <tr>
+          <td>City:</td>
+          <td>` + this.city + `</td>
+        </tr>
+        <tr>
+          <td>State:</td>
+          <td>` + this.state + `</td>
+        </tr>
+        <tr>
+          <td>Country</td>
+          <td>` + this.country + `</td>
+        </tr>
+        <tr>
+          <td>License Number</td>
+          <td>` + this.licenseNumber + `</td>
+        </tr>
+        <tr>
+          <td>NPI Number</td>
+          <td>` + this.id + `</td>
+        </tr>
+        <tr>
+          <td>DEA Registration Number</td>
+          <td>` + this.deaNumber + `</td>
+        </tr>
+        <tr>
+          <td>Include DEA Number on the prescription?</td>
+          <td>` + this.includeDea + `</td>
+        </tr>
+      </table>
+      `
+    }
+  },
   methods: {
     setData (data) {
       if (data.results && data.results.length > 0) {
@@ -511,16 +542,29 @@ export default {
           }
         }
         let prescriberNameString = ''
-        if(data.results[0].basic.name_prefix) prescriberNameString += data.results[0].basic.name_prefix + ' '
-        if(data.results[0].basic.first_name) prescriberNameString += data.results[0].basic.first_name + ' '
-        if(data.results[0].basic.last_name) prescriberNameString += data.results[0].basic.last_name + ' '
-        if(data.results[0].basic.credential) prescriberNameString += data.results[0].basic.credential
+        if (data.results[0].basic.name_prefix) prescriberNameString += data.results[0].basic.name_prefix + ' '
+        if (data.results[0].basic.first_name) prescriberNameString += data.results[0].basic.first_name + ' '
+        if (data.results[0].basic.last_name) prescriberNameString += data.results[0].basic.last_name + ' '
+        if (data.results[0].basic.credential) prescriberNameString += data.results[0].basic.credential
         this.prescriberName = prescriberNameString
         this.specialty = data.results[0].taxonomies[0].desc
+        // handle NPI-2 data
+        if (data.results[0].enumeration_type === 'NPI-2') {
+          this.groupName = data.results[0].basic.organization_name
+          this.prescriberName = ''
+        }
         this.currentStep = 1
-      } else {
-        this.npiFound = false
+        this.npiFound = true
       }
+      else {
+        this.npiFound = false
+        this.currentStep = 0
+      }
+    },
+    startOver () {
+      this.id = ''
+      this.npiFound = true
+      this.currentStep = 0
     },
     validateStep1 () {
       if (
@@ -573,7 +617,7 @@ export default {
           user_id: 'user_s0M53u6qxQpT90KoWRp78',
           template_params: {
             'subject': 'new order from rxprovisions.com',
-            'message': '<p>test message</p>',
+            'message': this.contactInformation + '<br><br>' + this.orderDetails + '<br><br>' + this.prescriberDetails,
             'to': 'kim@4siteusa.com',
             'from_name': 'rxprovisions.com',
           }
@@ -613,6 +657,21 @@ export default {
 
   .error {
     border: solid 1px red;
+  }
+}
+
+.order-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url("/images/order-hero.jpg") no-repeat;
+  background-size: cover;
+  height: 300px;
+
+  h1 {
+    color: var(--color-white);
+    text-shadow: 0 0 20px var(--color-black);
+    text-align: center;
   }
 }
 </style>
