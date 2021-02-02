@@ -608,21 +608,21 @@ export default {
         this.$refs.step5.scrollIntoView();
       })
       console.log('order submitted')
-      // axios({
-      //   method: 'post',
-      //   url: 'https://api.emailjs.com/api/v1.0/email/send/',
-      //   data: {
-      //     service_id: 'service_n1nlx9r',
-      //     template_id: 'template_e5mh7zg',
-      //     user_id: 'user_s0M53u6qxQpT90KoWRp78',
-      //     template_params: {
-      //       'subject': 'new order from rxprovisions.com',
-      //       'message': this.contactInformation + '<br><br>' + this.orderDetails + '<br><br>' + this.prescriberDetails,
-      //       'to': 'kim@4siteusa.com',
-      //       'from_name': 'rxprovisions.com',
-      //     }
-      //   }
-      // })
+      axios({
+        method: 'post',
+        url: 'https://api.emailjs.com/api/v1.0/email/send/',
+        data: {
+          service_id: 'service_n1nlx9r',
+          template_id: 'template_e5mh7zg',
+          user_id: 'user_s0M53u6qxQpT90KoWRp78',
+          template_params: {
+            'subject': 'new order from rxprovisions.com',
+            'message': this.contactInformation + '<br><br>' + this.orderDetails + '<br><br>' + this.prescriberDetails,
+            'to': 'mail@rxprovisions.com',
+            'from_name': 'rxprovisions.com',
+          }
+        }
+      })
     },
     validEmail: function (email) {
       let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
