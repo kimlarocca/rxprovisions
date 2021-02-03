@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import VFooter from 'vue-evolve/src/components/VFooter'
+import VFooter from 'vue-evolve/src/components/TheFooter'
 import VLogo from '../components/VLogo'
 
 export default {
