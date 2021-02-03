@@ -77,7 +77,7 @@
 import NpiForm from '../components/NpiForm'
 import VButton from 'vue-evolve/src/components/VButton'
 import VSpacer from 'vue-evolve/src/components/VSpacer'
-import Card from 'vue-evolve/src/components/Card'
+import Card from 'vue-evolve/src/components/VCard'
 
 export default {
   name: 'Home',

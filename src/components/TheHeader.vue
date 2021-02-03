@@ -20,7 +20,7 @@
 
 <script>
 import VButton from 'vue-evolve/src/components/VButton'
-import VHeader from 'vue-evolve/src/components/VHeader'
+import VHeader from 'vue-evolve/src/components/TheHeader'
 import VLogo from '../components/VLogo'
 
 export default {
