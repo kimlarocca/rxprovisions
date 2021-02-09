@@ -526,13 +526,27 @@ export default {
         this.info = data.results[0]
         this.firstName = data.results[0].basic.first_name
         this.lastName = data.results[0].basic.last_name
-        this.phone = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].telephone_number : ''
-        this.address1 = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].address_1 : ''
-        this.address2 = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].address_2 : ''
-        this.city = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].city : ''
-        this.zip = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].postal_code : ''
-        this.state = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].state : ''
-        this.country = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].country_name : 'United States'
+        if (data.results[0].practiceLocations) {
+          if (data.results[0].practiceLocations.length > 0) {
+            this.phone = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].telephone_number : ''
+            this.address1 = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].address_1 : ''
+            this.address2 = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].address_2 : ''
+            this.city = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].city : ''
+            this.zip = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].postal_code : ''
+            this.state = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].state : ''
+            this.country = data.results[0].practiceLocations ? data.results[0].practiceLocations[0].country_name : 'United States'
+          }
+        } else if (data.results[0].addresses) {
+          if (data.results[0].addresses.length > 0) {
+            this.phone = data.results[0].addresses ? data.results[0].addresses[0].telephone_number : ''
+            this.address1 = data.results[0].addresses ? data.results[0].addresses[0].address_1 : ''
+            this.address2 = data.results[0].addresses ? data.results[0].addresses[0].address_2 : ''
+            this.city = data.results[0].addresses ? data.results[0].addresses[0].city : ''
+            this.zip = data.results[0].addresses ? data.results[0].addresses[0].postal_code : ''
+            this.state = data.results[0].addresses ? data.results[0].addresses[0].state : ''
+            this.country = data.results[0].addresses ? data.results[0].addresses[0].country_name : 'United States'
+          }
+        }
         if (data.results[0].identifiers) {
           if (data.results[0].identifiers.length > 0) {
             const deaInfo = data.results[0].identifiers.filter(item => item.issuer === 'DEA')
@@ -540,6 +554,9 @@ export default {
             this.deaNumber = deaInfo.length > 0 ? deaInfo[0].identifier : ''
             this.licenseNumber = licenseInfo.length > 0 ? licenseInfo[0].identifier : ''
           }
+        }
+        if (data.results[0].taxonomies) {
+          this.licenseNumber = data.results[0].taxonomies.length > 0 ? data.results[0].taxonomies[0].license : ''
         }
         let prescriberNameString = ''
         if (data.results[0].basic.name_prefix) prescriberNameString += data.results[0].basic.name_prefix + ' '
@@ -555,8 +572,7 @@ export default {
         }
         this.currentStep = 1
         this.npiFound = true
-      }
-      else {
+      } else {
         this.npiFound = false
         this.currentStep = 0
       }
