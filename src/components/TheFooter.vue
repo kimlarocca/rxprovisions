@@ -7,7 +7,7 @@
       <template v-slot:blurb>
         <p>4 Beaver Brook Road, Suite 127 Lincoln Park, NJ 07035</p>
         <p>973-305-8105</p>
-        <p><a href="mailto:jpisano@rxprovisions.com">jpisano @ rxprovisions</a></p>
+        <p><a href="mailto:mail@RxPROvisions.com">mail @ RxPROvisions.com</a></p>
       </template>
     </v-footer>
   </div>
