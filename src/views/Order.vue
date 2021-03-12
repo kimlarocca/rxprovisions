@@ -85,7 +85,23 @@
               class="order-form-step2"
           >
             <h4 class="u-space--bottom">Step 2: Order Details</h4>
-            <div class="l-grid l-grid--2up">
+            <div class="l-grid l-grid--3up">
+              <div>
+                <label class="u-space--bottom">Form Type *
+                  <select v-model="formType">
+                    <option
+                        value="Physician"
+                        selected
+                    >
+                      Physician
+                    </option>
+                    <option value="Nurse">Nurse</option>
+                    <option value="Optometrist">Optometrist</option>
+                    <option value="Eyewear">Eyewear</option>
+                    <option value="Facility">Facility</option>
+                  </select>
+                </label>
+              </div>
               <div>
                 <label class="u-space--bottom">Pad/Prescription Type *
                   <select v-model="padType">
@@ -102,16 +118,51 @@
               </div>
               <div>
                 <label class="u-space--double--bottom">Quantity *
-                  <select v-model="quantity">
+                  <select v-if="padType === 'One-Part'" v-model="quantity">
                     <option
-                        value="1"
+                        value="5"
                         selected
-                    >1
+                    >5
                     </option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                  <select v-if="padType === 'Two-Part'" v-model="quantity">
+                    <option
+                        value="10"
+                        selected
+                    >10
+                    </option>
+                    <option value="12">12</option>
+                    <option value="16">16</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="60">60</option>
+                    <option value="80">80</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                  </select>
+                  <select v-if="padType === 'Upper Left Laser'" v-model="quantity">
+                    <option
+                        value="250"
+                        selected
+                    >250
+                    </option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                    <option value="2000">2000</option>
+                    <option value="3000">3000</option>
+                    <option value="4000">4000</option>
+                    <option value="5000">5000</option>
                   </select>
                 </label>
               </div>
@@ -140,11 +191,10 @@
           >
             <h4 class="u-space--bottom">Step 3: Prescriber Details</h4>
             <p class="u-space--bottom">NPI Number: {{ id }}</p>
-            <label class="u-space--bottom">Group Name (if applicable) or Facility Name *
+            <label class="u-space--bottom">Group Name (if applicable) or Facility Name
               <input
                   type="text"
                   v-model="groupName"
-                  :class="groupName==='' ? 'error' : ''"
               >
             </label>
             <label class="u-space--bottom">Prescriber's Name and Degree *
@@ -271,11 +321,10 @@
                   :class="licenseNumber==='' ? 'error' : ''"
               >
             </label>
-            <label class="u-space--bottom">DEA Registration Number *
+            <label class="u-space--bottom">DEA Registration Number
               <input
                   type="text"
                   v-model="deaNumber"
-                  :class="deaNumber==='' ? 'error' : ''"
               >
             </label>
             <fieldset class="u-space--bottom">
@@ -355,7 +404,7 @@
             class="order-form-step5"
         >
           <h4 class="u-space--bottom">Your Order Has Been Submitted!</h4>
-          <p>Thank you.</p>
+          <p>Thank you for your order! A proof copy showing your practice information on an Rx Form Template will be emailed for your comments or approval. Payment is due at the time of proof acceptance by credit card. Pre-existing clients, previously agreed upon payment terms will apply.</p>
         </div>
       </div>
       <v-spacer size="quad" />
@@ -387,8 +436,9 @@ export default {
       phone: '',
       info: null,
       id: null,
+      formType: 'Physician',
       padType: 'One-Part',
-      quantity: 1,
+      quantity: 5,
       groupName: '',
       prescriberName: '',
       specialty: '',
@@ -426,6 +476,11 @@ export default {
           .catch(function (error) {
             console.log(error)
           })
+    },
+    padType () {
+      if (this.padType === 'One-Part') this.quantity = 5
+      if (this.padType === 'Two-Part') this.quantity = 10
+      if (this.padType === 'Upper Left Laser') this.quantity = 250
     }
   },
   computed: {
@@ -454,6 +509,10 @@ export default {
     orderDetails () {
       return `
       <table class="u-space--bottom">
+        <tr>
+          <td>Form Type:</td>
+          <td>` + this.formType + `</td>
+        </tr>
         <tr>
           <td>Pad/Prescription Type:</td>
           <td>` + this.padType + `</td>
@@ -597,7 +656,6 @@ export default {
     },
     validateStep3 () {
       if (
-          this.groupName !== '' &&
           this.prescriberName !== '' &&
           this.specialty !== '' &&
           this.address1 !== '' &&
@@ -606,8 +664,7 @@ export default {
           this.state !== '' &&
           this.country !== '' &&
           this.licenseNumber !== '' &&
-          this.id > 0 &&
-          this.deaNumber !== ''
+          this.id > 0
       ) {
         this.displayErrorMessage = false
         this.currentStep = 4
