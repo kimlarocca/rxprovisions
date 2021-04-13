@@ -25,6 +25,10 @@ export default {
     font-size: 1.5rem;
   }
 
+  i {
+    font-size: 2rem;
+  }
+
   a,
   a:visited,
   a:active {
